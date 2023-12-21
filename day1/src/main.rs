@@ -1,17 +1,14 @@
 use fs;
 use std::collections::HashMap;
 fn main() {
-let input = parseInput("./src/data/test.txt");
+    let input = parseInput("./src/data/test.txt");
 
-// let input = parseInput("./src/data/main.txt");
-let test = calculate(input);
+    // let input = parseInput("./src/data/main.txt");
+    let test = calculate(input);
 
-println!("Out:{test}");
+    println!("Out:{test}");
 }
-
-
-fn parseInput(path: &str) -> String{
-
+fn parseInput(path: &str) -> String {
     match std::fs::read_to_string(std::path::Path::new(path)) {
         Ok(contents) => {
             println!("File: {}", contents);
@@ -24,8 +21,7 @@ fn parseInput(path: &str) -> String{
     }
 }
 
-fn calculate(input: String) -> i32{
-
+fn calculate(input: String) -> i32 {
     let nums_map: HashMap<&str, char> = [
         ("one", '1'),
         ("two", '2'),
@@ -42,34 +38,37 @@ fn calculate(input: String) -> i32{
     .collect();
 
     let mut out: i32 = 0;
-    for l in input.lines(){
+    for l in input.lines() {
         let mut num: String = "".to_string();
         let mut word: String = "".to_string();
-        for c in l.chars(){
-           word.push(c);
-           if (c as u8 >= 48 && c as u8 <= 57){
+        for c in l.chars() {
+            word.push(c);
+            if (c as u8 >= 48 && c as u8 <= 57) {
                 num.push(c);
                 word.clear();
                 break;
-           } 
-           else if (nums_map.contains_key(word.to_lowercase().as_str())){
-               num.push(*nums_map.get(word.as_str()).unwrap());
-               word.clear();
-               break;
-           }
-
+            } else if (nums_map.contains_key(word.to_lowercase().as_str())) {
+                num.push(*nums_map.get(word.as_str()).unwrap());
+                word.clear();
+                break;
+            }
         }
-        for c in l.chars().rev(){
-           word.push(c);
-           if (c as u8 >= 48 && c as u8 <= 57){
+        for c in l.chars().rev() {
+            word.push(c);
+            if (c as u8 >= 48 && c as u8 <= 57) {
                 num.push(c);
                 word.clear();
                 break;
-           } 
-           else { 
+            } else {
                 let mut s = String::new();
-                    for i in word.chars(){
-                if (nums_map.contains_key(word.chars().rev().collect::<String>().to_lowercase().as_str())){
+                for i in word.chars() {
+                    if (nums_map.contains_key(
+                        word.chars()
+                            .rev()
+                            .collect::<String>()
+                            .to_lowercase()
+                            .as_str(),
+                    )) {
                         s.push(i);
                         match nums_map.get(s.to_lowercase().as_str()) {
                             Some(w) => {
@@ -80,17 +79,15 @@ fn calculate(input: String) -> i32{
                             }
                         }
                     }
-                       break;
-                       word.clear();
-                   }
+                    break;
+                    word.clear();
+                }
             }
-
         }
-    
 
         let num_temp: Result<i32, _> = num.parse();
         // Handle the parsing result
-        match num_temp{
+        match num_temp {
             Ok(parsed_num) => {
                 println!("Parsed number: {}", parsed_num);
                 // Use parsed_num as a u32 here
@@ -100,9 +97,7 @@ fn calculate(input: String) -> i32{
                 println!("Error parsing: {}", e);
             }
         }
-
-    }        
+    }
 
     return out;
-    
 }
